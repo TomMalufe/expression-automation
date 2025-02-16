@@ -1,4 +1,4 @@
-# Sprite Generator with Stable Diffusion and Rembg
+# Sprite Generator with Stable Diffusion
 
 This project generates custom sprite images using the Stable Diffusion WebUI API. It is optimized for local setups of Stable Diffusion.
 
@@ -10,6 +10,7 @@ This project generates custom sprite images using the Stable Diffusion WebUI API
 - Batch processing for multiple expressions defined in a JSON file.
 
 ## Recommended
+- Install and run SD Next locally for easy, free image generation
 - For Anime like characters, use [magnum-v4-22b-gguf](https://huggingface.co/anthracite-org/magnum-v4-22b-gguf) as the default model.
 - If you would like to remove image backgrounds, consider using [Rembg](https://github.com/danielgatis/rembg).
 
@@ -30,8 +31,8 @@ Follow these steps to set up and use the project:
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone https://github.com/TomMalufe/expression-automation.git
+   cd expression-automation
    ```
 
 2. Install the required Python packages:
