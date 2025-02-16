@@ -40,7 +40,7 @@ Follow these steps to set up and use the project:
    pip install -r requirements.txt
    ```
 
-3. Edit up your `.env` environment variables:
+3. Edit your `.env` environment variables:
     - Open the `.env` file in the root directory.
     - Update the following variables as needed:
       ```ini
