@@ -11,7 +11,7 @@ This project generates custom sprite images using the Stable Diffusion WebUI API
 
 ## Recommended
 - Install and run SD Next locally for easy, free image generation
-- For Anime like characters, use [magnum-v4-22b-gguf](https://huggingface.co/anthracite-org/magnum-v4-22b-gguf) as the default model.
+- For Anime like characters, use [Lykon/AAM_XL_AnimeMix](https://huggingface.co/Lykon/AAM_XL_AnimeMix) as the default model.
 - If you would like to remove image backgrounds, consider using [Rembg](https://github.com/danielgatis/rembg).
 
 ---
@@ -112,16 +112,17 @@ This will process all images in the `generated_sprites/` folder and save the res
 
 ## Example Workflow
 
-1. Start the SD WebUI with the **Magnum-v4-22b-gguf** model.
-2. Run the script to generate sprites:
+1. Start the SD WebUI and find the seed and prompt that works best for your character.
+2. Update the `prompts.json` file with your prompt information
+3. Run the script to generate sprites:
    ```bash
-   python expressions.py
+   python expressions.py --seed 1234567890
    ```
-3. Run the script again to re-generate sprites that don't look right:
+4. Run the script again to re-generate sprites that don't look right:
     ```bash
-    python expressions.py --expressions happy,angry
+    python expressions.py --seed 1234567890 --expressions happy,angry
     ```
-4. (Optional) Remove sprite backgrounds:
+5. (Optional) Remove sprite backgrounds:
    ```bash
    rembg p -m birefnet-portrait generated_sprites/ output/
    ```
@@ -153,5 +154,5 @@ This project is open-source and available under the MIT License.
 
 ## Acknowledgments
 
-- [Stable Diffusion Next](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and the [Magnum-v4-22b-gguf](https://huggingface.co/anthracite-org/magnum-v4-22b-gguf) model for enabling image generation.
+- [Stable Diffusion Next](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and the [Lykon/AAM_XL_AnimeMix](https://huggingface.co/Lykon/AAM_XL_AnimeMix) model for enabling image generation.
 - [Rembg](https://github.com/danielgatis/rembg) for the background removal utility.
