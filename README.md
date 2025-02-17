@@ -1,158 +1,162 @@
 # Sprite Generator with Stable Diffusion
 
-This project generates custom sprite images using the Stable Diffusion WebUI API. It is optimized for local setups of Stable Diffusion.
+A flexible tool to create unique sprite/images using the Stable Diffusion WebUI API. This application is tailored for users who run Stable Diffusion locally and want to automate sprite generation with detailed control over settings.
 
 ---
 
-## Features
+## Key Features
 
-- Generate sprites with customizable prompts, expressions, and image settings.
-- Batch processing for multiple expressions defined in a JSON file.
-
-## Recommended
-- Install and run SD Next locally for easy, free image generation
-- For Anime like characters, use [Lykon/AAM_XL_AnimeMix](https://huggingface.co/Lykon/AAM_XL_AnimeMix) as the default model.
-- If you would like to remove image backgrounds, consider using [Rembg](https://github.com/danielgatis/rembg).
+- **Customizable Sprite Generation**: Define prompts, expressions, image size, and quality to suit your needs. Ideal for creating character sprites and assets.
+- **Batch Processing**: Generate multiple expressions (e.g., happy, sad, angry) in a single run using a JSON configuration.
+- **Versioned Output Handling**: Automatically save images with versioned filenames to prevent overwriting.
+- **Optional Background Removal**: Use `rembg` for post-processing to make images transparent-friendly.
 
 ---
 
-## Prerequisites
+## Why Use This Tool?
 
-Before you can use this project, ensure that the following requirements are met:
-
-1. **Python 3.11 or later:** The project relies on Python scripts. Install necessary Python dependencies using `pip`.
-
+- **Designed for Local Setups**: Works seamlessly with local installations of Stable Diffusion.
+- **Anime Support**: Recommended settings and models like [Lykon/AAM_XL_AnimeMix](https://huggingface.co/Lykon/AAM_XL_AnimeMix) for anime-styled art.
+- **Flexible Input**: Input prompts via JSON files to easily customize image parameters and manage multiple expressions.
 
 ---
 
-## Installation
+## Requirements
 
-Follow these steps to set up and use the project:
+To get started, ensure the following are set up:
 
-1. Clone the repository:
+1. **Python 3.11 or newer**: The project uses Python scripts for API communication and file handling.
+2. **Stable Diffusion WebUI** (Next or AUTOMATIC1111): Run locally at `http://127.0.0.1:7860/`.
+3. **Python Libraries**: Install all dependencies using a `requirements.txt` file.
+4. **Optional Tools (for Background Removal)**: Install [Rembg](https://github.com/danielgatis/rembg) for post-processing.
+
+---
+
+## Installation and Setup
+
+1. **Clone Repository**:
    ```bash
    git clone https://github.com/TomMalufe/expression-automation.git
    cd expression-automation
    ```
 
-2. Install the required Python packages:
+2. **Install Requirements**:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Edit your `.env` environment variables:
-    - Open the `.env` file in the root directory.
-    - Update the following variables as needed:
+3. **Configure Environment**:
+    - Create and set the `.env` file in the project root with details such as:
       ```ini
       SD_API_URL=http://127.0.0.1:7860/sdapi/v1/txt2img
       OUTPUT_FOLDER=generated_sprites
       ```
 
-4. Define your prompts in a JSON file (default: `prompts.json`) to control sprite generation. Example structure:
-   ```json
-   {
-     "base_prompt": "A highly detailed sprite of",
-     "negative_prompt": "blurred, low quality, distorted",
-     "character_details": "fantasy character, medieval attire",
-     "expressions": {
-       "happy": "smiling, cheerful",
-       "angry": "furious, intense gaze"
-     }
-   }
-   ```
+4. **Prepare Prompt File**:
+    - Customize a `prompts.json` file (or use an existing one). For example:
+      ```json
+      {
+        "default_seed": 123456789,
+        "prompt_prefix": "A beautiful, detailed sprite of",
+        "prompt_suffix": "in a fantasy setting",
+        "negative_prompt": "blurry, distorted, low quality",
+        "character_prompt": "medieval warrior in armor",
+        "expressions": {
+          "happy": "smiling, cheerful expression",
+          "angry": "furious look, intense gaze"
+        }
+      }
+      ```
 
 ---
 
 ## Usage
 
-Run the `expressions.py` script with the desired arguments:
+Use the `expressions.py` script to generate sprites programmatically. Below are the available options:
 
-```bash
-python expressions.py [OPTIONS]
-```
+### Command-Line Options:
 
-### Command-Line Options
+| Parameter            | Description                                                                                      | Default             |
+|----------------------|--------------------------------------------------------------------------------------------------|---------------------|
+| `-p` `--prompt_file` | Path to the JSON file containing prompts.                                                       | `prompts.json`      |
+| `-w` `--width`       | Width of the generated image (pixels).                                                          | `1024`              |
+| `-h` `--height`      | Height of the generated image (pixels).                                                         | `1024`              |
+| `-s` `--steps`       | Number of steps used by the algorithm.                                                          | `30`                |
+| `-c` `--cfg_scale`   | Config scale value for model guidance.                                                          | `7.5`               |
+| `-S` `--sampler`     | Sampling method.                                                                                | `SA Solver`         |
+| `-e` `--seed`        | Seed for reproducible outputs. Overrides default seed in JSON prompt.                           | `2472820057`        |
+| `-x` `--expressions` | Comma-separated list of expressions from the JSON file (`happy,angry`). Defaults to all.         | `All expressions`   |
 
-Below are the main options available:
+### Example Commands:
 
-- **`--prompt_file`**: Path to the JSON file with prompts (default: `prompts.json`).
-- **`--width`**: Width of the generated image (default: 1024).
-- **`--height`**: Height of the generated image (default: 1024).
-- **`--steps`**: Number of steps to generate the image (default: 30).
-- **`--cfg_scale`**: Config scale for model guidance (default: 7.5).
-- **`--sampler`**: Sampling method (default: `SA Solver`).
-- **`--seed`**: Seed for consistent image generation (default: 2472820057).
-- **`--expressions`**: Comma-separated list of expressions to generate / re-generate (e.g., `happy,angry`). Generates everything if left out.
+1. Generate all sprites from the default `prompts.json` file:
+   ```bash
+   python expressions.py
+   ```
 
-Example to generate sprites for `happy` and `angry` expressions:
+2. Generate specific expressions (e.g., happy and sad):
+   ```bash
+   python expressions.py -x happy,sad
+   ```
 
-```bash
-python expressions.py --expressions happy,angry
-```
+3. Override image dimensions and steps:
+   ```bash
+   python expressions.py -w 512 -h 512 -s 50
+   ```
 
 ---
 
-## Post-Processing (Optional)
+## Post-Processing with `rembg` (Optional)
 
-If you prefer your sprites without backgrounds, you can process the generated images using `rembg`:
+To remove sprite backgrounds and create transparent images:
 
-1. Install the Rembg model:
+1. **Install `rembg`:**
    ```bash
    pip install rembg
    ```
 
-2. Use the following command to process your sprite images:
+2. **Process Images in the Output Folder**:
    ```bash
    rembg p -m birefnet-portrait generated_sprites/ output/
    ```
-
-This will process all images in the `generated_sprites/` folder and save the results in the `output/` folder.
+    - Replace `birefnet-portrait` with the model of your choice.
+    - This saves the background-removed images in the `output/` subdirectory.
 
 ---
 
 ## Example Workflow
 
-1. Start the SD WebUI and find the seed and prompt that works best for your character.
-2. Update the `prompts.json` file with your prompt information
-3. Run the script to generate sprites:
+1. **Start Stable Diffusion WebUI**: Ensure the local server is running (`http://127.0.0.1:7860/`).
+2. **Refine Prompts**: Use the WebUI to test your prompts and find the right seed, character, and settings.
+3. **Update JSON File**: Add your refined prompt(s) and expressions to the `prompts.json` template.
+4. **Run the Script**:
    ```bash
-   python expressions.py --seed 1234567890
+   python expressions.py --seed 987654321 --expressions happy,angry
    ```
-4. Run the script again to re-generate sprites that don't look right:
-    ```bash
-    python expressions.py --seed 1234567890 --expressions happy,angry
-    ```
-5. (Optional) Remove sprite backgrounds:
+5. **Process Results** (Optional):
    ```bash
    rembg p -m birefnet-portrait generated_sprites/ output/
    ```
 
 ---
 
-## Troubleshooting and Tips
+## Troubleshooting
 
-- **Stable Diffusion Errors:**
-    - Ensure the SD WebUI is running and accessible at the URL specified in `SD_API_URL`.
-    - Verify that the correct model is loaded.
+- **API URL Errors**: Ensure the `SD_API_URL` in the `.env` file matches the running WebUI server.
+- **Invalid JSON**: Verify that the `prompts.json` file is properly formatted.
+- **Background Removal Issues**: Check the `rembg` documentation [here](https://github.com/danielgatis/rembg).
 
-- **File Not Found Errors:**
-    - Check that the `prompts.json` file exists and is properly formatted.
+---
 
-- **Post-Processing Issues:**
-    - Refer to the [Rembg documentation](https://github.com/danielgatis/rembg) for guidance if you encounter problems.
+## Credits
 
-- **Customizing Prompts:**
-    - Update the `prompts.json` file to personalize the character base, expressions, or additional details.
+- **Stable Diffusion**: For enabling high-quality, AI-generated images.
+- **Lykon/AAM_XL_AnimeMix**: Recommended model for anime art.
+- **Rembg**: For optional background removal.
+- **Community Support**: Contributions and open-source tools.
 
 ---
 
 ## License
 
-This project is open-source and available under the MIT License.
-
----
-
-## Acknowledgments
-
-- [Stable Diffusion Next](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and the [Lykon/AAM_XL_AnimeMix](https://huggingface.co/Lykon/AAM_XL_AnimeMix) model for enabling image generation.
-- [Rembg](https://github.com/danielgatis/rembg) for the background removal utility.
+This project is distributed under the MIT License.

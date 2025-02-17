@@ -71,17 +71,23 @@ def generate_image(api_url, payload, output_folder, expression):
 
 def parse_arguments():
     """Parse command-line arguments for payload settings."""
-    parser = argparse.ArgumentParser(description="Generate images using SD WebUI API.")
-    parser.add_argument("--prompt_file", type=str, default="prompts.json",
+    parser = argparse.ArgumentParser(description="Generate images using SD WebUI API.", add_help=False)
+
+    # Add custom --help option to replace the default
+    parser.add_argument("--help", action="help", help="Show this help message and exit.")
+
+    # Add other arguments
+    parser.add_argument("-p", "--prompt_file", type=str, default="prompts.json",
                         help="Path to the prompt file (default: prompts.json)")
-    parser.add_argument("--width", type=int, default=1024, help="Image width (default: 1024)")
-    parser.add_argument("--height", type=int, default=1024, help="Image height (default: 1024)")
-    parser.add_argument("--steps", type=int, default=30, help="Number of steps (default: 30)")
-    parser.add_argument("--cfg_scale", type=float, default=7.5, help="CFG scale (default: 7.5)")
-    parser.add_argument("--sampler", type=str, default="SA Solver", help="Sampling method (default: SA Solver)")
-    parser.add_argument("--seed", type=int, default=2472820057,
+    parser.add_argument("-w", "--width", type=int, default=1024, help="Image width (default: 1024)")
+    parser.add_argument("-h", "--height", type=int, default=1024, help="Image height (default: 1024)")
+    parser.add_argument("-s", "--steps", type=int, default=30, help="Number of steps (default: 30)")
+    parser.add_argument("-c", "--cfg_scale", type=float, default=7.5, help="CFG scale (default: 7.5)")
+    parser.add_argument("-S", "--sampler", type=str, default="SA Solver", help="Sampling method (default: SA Solver)")
+    parser.add_argument("-e", "--seed", type=int, default=2472820057,
                         help="Seed for consistent generation (default: 2472820057)")
-    parser.add_argument("--expressions", type=str, help="Comma-separated list of expressions to generate. (default: All expressions)")
+    parser.add_argument("-x", "--expressions", type=str,
+                        help="Comma-separated list of expressions to generate. (default: All expressions)")
     return parser.parse_args()
 
 def main():
@@ -91,6 +97,9 @@ def main():
 
     # Load prompts from the specified file or default to "prompts.json"
     prompts = load_prompts(args.prompt_file)
+
+    # Set seed: use the seed from arguments if provided, otherwise fallback to the default in prompts
+    seed = args.seed if args.seed != 2472820057 else prompts.get("default_seed", 2472820057)
 
     # Determine which expressions to generate
     expressions = prompts["expressions"]
@@ -110,13 +119,13 @@ def main():
 
         # Create the payload with user-specified overrides
         payload = {
-            "prompt": f"{prompts['base_prompt']}, {description}, {prompts['character_details']}",
+            "prompt": f"{prompts['prompt_prefix']}, {prompts['character_prompt']}, {description}, {prompts['prompt_suffix']}",
             "negative_prompt": prompts["negative_prompt"],
             "steps": args.steps,
             "cfg_scale": args.cfg_scale,
             "width": args.width,
             "height": args.height,
-            "seed": args.seed,
+            "seed": seed,
             "sampler_name": "SA Solver",
             "subseed": -1,
             "subseed_strength": 0.1,

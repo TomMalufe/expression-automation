@@ -1,8 +1,9 @@
 {
-  "base_prompt": "visual novel character sprite, flat shade background, best quality, absurdres, masterpiece, medium close up facial portrait, [detailed face]",
-  "character_details": "caucasian, female, 22 years old, expressive brown eyes, Messy brown hair, Soft features, Big round glasses, Short stature, Pleasantly plump figure, Curvy but not overweight, Large breasts, Plump and pleasant to hold and cuddle, conservative summer dress",
-  "negative_prompt": "lowres, bad anatomy, bad hands, text, error, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, background",
-
+  "default_seed": 1868059206,
+  "prompt_prefix": "Anime-style",
+  "character_prompt": "female character, 36 years old, brown hair, hazel eyes, DD-cup breasts, curvy waist, wide hips, full chest, balanced proportions. Shoulder-length wavy hair, soft but confident facial features, expressive eyes with depth.",
+  "prompt_suffix": "She wears a fitted, elegant turtleneck sweater (warm, soft fabric, subtle ribbed texture) and a high-waisted pencil skirt (knee-length, flattering fit). She has a warm and inviting appearance. Wedding ring on left hand, delicate necklace. Smooth anime lineart, cel-shaded, high detail, high-quality shading. Masterpiece, best quality, ultra-detailed. No background, white background.",
+  "negative_prompt": "Low-quality, blurry, extra limbs, deformed hands, watermark, distorted anatomy, ugly, text, bad proportions, missing fingers, disfigured face, innocent look",
   "expressions": {
     "admiration": "expression of Admiration, Eyes wide with awe, slightly open mouth, glowing cheeks, soft but bright gaze, dreamy expression",
     "amusement": "expression of Amusement, Big grin, one eyebrow raised, laughing eyes, head slightly tilted back, a playful or teasing smirk",
